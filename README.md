@@ -1,189 +1,218 @@
-## Full-Stack Nanodegree: Project 3 - Catalog App
+https://discussions.udacity.com/t/p5-how-i-got-through-it/15342
+https://github.com/robertavram/Linux-Server-Configuration
+https://docs.google.com/document/d/1J0gpbuSlcFa2IQScrTIqI6o3dice-9T7v8EDNjJDfUI/pub?embedded=true
+
+Create development environment
+Connect to environment
+sudo apt-get update
+sudo apt-get upgrade
+"install package maintainer's version" when asked about grub file
+apt-get dist-upgrade
+dpkg-reconfigure -plow unattended-upgrades
+'yes' to allowing the unattended upgrades
+dpkg-reconfigure tzdata
+	none of the above
+	select UTC
+
+### add grader user ###
+adduser grader
+	set Full Name to "Udacity Grader"
+	set passwod to "grader"
+
+cd /etc/sudoers.d
+vi grader
+	grader ALL=(ALL) NOPASSWD:ALL
+chmod 440 grader
+
+confirm sudo worked:
+su grader
+cd /etc
+sudo less sudoers
+(should work)
+
+exit (gets you back to root user login)
+
+### Set up ssh over 2200 ###
+vi /etc/ssh/sshd_config
+
+near top, find line that says Port 22
+change to:
+Port 2200
+:wq!
+
+service ssh restart
+
+exit (completely log off)
+
+Now log back on as root, but use this (notice the -p 2200 on the end):
+ssh -i ~/.ssh/udacity_key.rsa root@52.25.121.39 -p 2200
 
 
-#### CONTENTS ####
+### set up firewall ###
 
--A- Project Details
-        Application Overview
-        Requirements
--B- Prerequisites
--C- Project Files
--D- Installation/Use
--E- Customizing the Application
--F- Known Issues
+ufw allow http
+ufw allow ntp
+ufw allow 2200
+ufw default deny incoming
+ufw default allow outgoing
+ufw reload
 
+### Install Apache ###
+apt-get install apache2
+sudo reboot
+wait 60 seconds
 
-#### -A- PROJECT DETAILS ####
+while waiting, open terminal on your local machine
+ssh-keygen -t rsa
+	name the file linuxCourse_rsa
+	no passphrase
 
-Application Overview
-####################
+cat linuxCourse_rsa.pub
+highlight and copy
+connect to server again as root
 
-This application is a Python-based web application that offers a simplistic
-catalog driven by a Postgres database on the backend. The application allows
-anyone to see the categories and items in the database. Additionally, if
-the user logs in using a Google Plus login, they can also modify the data
-in the database such as adding, editing, and deleting categories in the database
-as well as adding, editing, and deleting items within each category.
-
-The application as provided comes with a small set of data already included
-in the catalog.db database file. In actual use, you would want to delete this
-file and build your own initial data file. See the section on Installation/Use
-for more details on this.
-
-
-Requirements
-###########################
-
-The following project requirements are defined by the Udacity project rubric
-that was provided for the project.
-
-Specifications (minimum required functionality)
-1.  Page does implement an JSON endpoint with all required content.
-2.  Page does read category and item information from a database.
-3.  Page does include a form allowing users to add new items and correctly 
-    processes submitted forms.
-4   Page does include a function to edit/update a current record in the database 
-    table and correctly processes submitted forms.
-5.  Page does include a function to delete a current record.
-6.  Page does implement a third-party authentication & authorization service; 
-    and create, delete and update operations do consider authorization status 
-    prior to execution.
-7.  Code is ready for personal review and neatly formatted.
-8.  Comments are present and effectively explain longer code procedures.
-9.  A README file is included detailing all steps required to successfully 
-    run the application.
-    
-
-#### -B- PREREQUISITES ####
-In order to run this application on your machine, there are a number of
-prerequisites that must be met:
-a)  You must have the Postgres database system installed on your machine
-b)  You must have Python 2.x to run the code. It was developed on 2.7, but
-    may or may not work on other versions.
-c)  You must have the Flask microframework installed including the Jinja2
-    templating engine (which is included by default).
-    See http://flask.pocoo.org for more details on Flask and Jinja.
-d)  You must have the SQLAlchemy extension for Flask installed on your machine.
-e)  For the site to render correctly, you must have an active Internet connection
-    as the site makes heavy use of the Bootstrap framework and loads it
-    dynamically via content delivery networks rather than prepackaging it.
-    You will also need the Internet connection to be able to log in
-f)  If you want to log in, you will also need a Google account to sign in with.
-    Only your id and name are extracted from Google - no other data is used.
+su grader
+cd ~
+mkdir .ssh
+cd .ssh
+vi authorized_keys
+	press 'i' to insert
+	paste (the contents of the linuxCourse_rsa.pub file you catted earlier)
+	:wq! to save 
+chmod 400 authorized_keys
 
 
-#### -C- PROJECT FILES ####
+### color mods ###
 
-Within the project files you will find the following:
-a)  At the top level of the project you will find this README.md file as well
-    as the run.py file (the main file used to launch the application) and a
-    config.py file that contains a handful of configuration settings.
-b)  The catalog_main directory is a Python package containing the core of the
-    application and sub-packages containing various components of functionality.
-    The app itself is defined in the __init__.py file.
-c)  The mod_catalog package contains the core code for the logic of the app
-    (within controllers.py) as well as the models.py file that contains the
-    object models for the Category and CategoryItem objects in the database.
-    This allows object-relational mapping between the database and Python
-    objects.
-d)  The mod_db subdirectory contains the database schema (database_setup.py)
-    and a file that can be used to populate the database with an initial load
-    of data (populate_db.py).
-e)  The static subdirectory contains static files, in this case only a css
-    subdirectory and the styles.css file for site styling.
-f)  The templates subdirectory is used by the Jinja2 templating system and
-    the app to render the site's pages properly. Within the catalog subdirectory,
-    there are templates for major function point in the application and each 
-    template is heavily commented to explain its use. The base.html template is 
-    the core page template that all the others inherit from and contains the 
-    main HTML code that doesn't change from page to page.
-    Loose within the templates subdirectory is also the 404.html file which
-    is displayed when the user attempts to reach a page that doesn't exist.
-    Feel free to customize this file to suit your requirements for "page not
-    found" errors.
-    
-    
-#### -D- INSTALLATION/USE ####
+cd ~
+mv .profile .bash_profile
+vi .bash_profile
+go to end of file
+A (append)
+type this:
 
-To INSTALL this application, follow these steps:
-a)  First, make sure your machine meets all of the prerequisites described above.
-    If you are missing necessary libraries or elements, it is up to you to
-    seek them out, install them, and validate their proper use. It is beyond
-    the scope of this document to try to explain all of that.
-b)  Download the project to your computer into an appropriate directory. That
-    can mean different things on different platforms, so interpretation is
-    up to you. You can use git clone to pull down the entire project or use
-    Github's app or "Download ZIP" options to pull it down.
-c)  CRITICAL: you will need to create a developer account with Google and
-    then create a project to associate with this project. The reason for this
-    is that a "client secret" is needed to enable the Google+ authentication
-    to work and you get that by creating a project. See the relevant docs
-    at Google's developer pages and the Google Developer Console to get that
-    set up. Once set up, you will need to download the client_secrets.json
-    file and save it to your machine ONE LEVEL UP from the project root (said
-    another way, it must be 2 levels up from run.py).
-    The file containing the secret must be named client_secrets.json or the 
-    app will not find it to load it.
+alias ls='ls -la --color'
 
-    
-To RUN this application, follow the above installation steps and then:
-a)  Once you have the project installed, go to a command line and "cd" into
-    the directory containing the project root, then cd into the "catalog"
-    directory (which is the project root itself).
-b)  Now just type this followed by the return key to launch the application.
-    python run.py
-c)  Once launched, point your browser to http://localhost:8000 to see the
-    application and use the various pages in the app.
-    
+LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rpm=90'
+export LS_COLORS
 
-    
-#### -E- CUSTOMIZING THE APP ####
+then :wq! to save it
 
-The principle customizations that one would consider making to the app would
-involve the initial populating of the database with categories and items so
-that when the app was first launched, there is at least one category and
-one item in the database.
+now:
+vi .vimrc
 
-To reset the database to empty and populate it with your own initial set of
-data, you must perform the following steps:
+i (to insert) then type:
 
-a)  Delete the catalog.db file that came with the project. It's located inside
-    the catalog_main package, then inside the mod_db subdirectory.
-b)  In that same subdirectory, you will find a file named populate_db.py
-    Open this file into your favorite text editor and make the appropriate
-    changes to what is already there. The comments at the top explain how
-    you can change it and there is a clear indicator of where your modifications
-    should go. The existing code that created the catalog.db file is there and
-    well-commented so you can easily modify what's there and copy/paste more
-    iterations as needed. If you have the Python skill, you could also adapt
-    it further to read the info from some other sort of file, but that's well
-    beyond the scope of this document and is an exercise for you to undertake
-    on your own.
-        
-        
-#### -F- KNOWN ISSUES ####
+highlight comment ctermfg=cyan
 
-The app has very minimal error checking and catches only basic errors and 
-problems. As such, it should not be considered a secure app and more should
-be done to improve the overall security of the app, specifically around the
-way that buttons are shown (using only CSS to "hide" them).
-
-If you delete a category, the system is presently set up to automatically
-delete all the child items of that category. That may NOT be the behavior
-you desire. If you wish to change the code to handle this differently, you
-will need to change the models.py file in mod_catalog:
-
-Replace this line:
-category = relationship(Category, backref=backref("items", cascade="all"))
-
-With this:
-category = relationship(Category)  
-   
-and then make the appropriate additional code modifications in controllers.py
-within the catDelete() function.
-
-Finally, I made some attempt to split the app up into logical packages but have 
-not had much success getting it to work, hence the current state. More could be 
-done to improve the code structure and separation of concerns.
+then type :wq! to save
 
 
+
+exit
+exit
+from terminal on your local machine, now try to connect this way:
+ssh -i ~/.ssh/linuxCourse_rsa grader@52.25.121.39 -p 2200
+
+cd /etc
+sudo visudo
+	find the line like this:
+	root   ALL=(ALL:ALL) ALL
+
+	and comment it out. It should look like this when you are done:
+	#root   ALL=(ALL:ALL) ALL
+
+	then press ctrl-x
+	press y to save the file
+	press return to accept the default
+
+type:
+sudo less sudoers
+and make sure that the line you changed above is properly commented out.
+
+sudo vi /etc/ssh/sshd_config
+go to the end of the file and type:
+AllowUsers grader
+
+
+sudo apt-get install -y ntp
+sudo apt-get install python-setuptools libapache2-mod-wsgi
+sudo apt-get install python-pip
+sudo apt-get install -y postgresql
+sudo apt-get install -y python-dev
+sudo apt-get install git
+sudo apt-get install -y python-flask
+sudo apt-get install -y python-sqlalchemy
+sudo apt-get install -y python-psycopg2
+sudo apt-get install libpq-dev python-dev
+sudo pip install Flask
+sudo pip install sqlalchemy
+sudo pip install oauth2client
+sudo pip install -U psycopg2
+
+### clone project ###
+
+open web browser and go to your project repo
+click the button to show the HTTPS clone link
+copy it
+
+go back to the server
+cd /var/www
+git clone <paste HTTPS link>
+this will clone your project to the web directory.
+
+do an ls to see what the directory name is (should be same as your project repo name)
+cd into that directory
+sudo chmod 400 .git
+
+### Configure Apache ###
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+
+sudo vi /etc/apache2/sites-available/catalog.conf
+	make changes
+	<VirtualHost *:80>
+                ServerName ec2-52-25-121-39.us-west-2.compute.amazonaws.com
+                ServerAdmin codingvirtual@gmail.com
+                WSGIScriptAlias / /var/www/p5-linux-server-config/flaskapp.wsgi
+                <Directory /var/www/p5-linux-server-config/>
+                        Order allow,deny
+                        Allow from all
+                </Directory>
+                Alias /catalog/static /var/www/p5-linux-server-config/catalog_main/static
+                <Directory /var/www/p5-linux-server-config/catalog/static/>
+                        Order allow,deny
+                        Allow from all
+                </Directory>
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                LogLevel warn
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo vi /var/www/<project-root>/flaskapp.wsgi
+	import sys
+	import logging
+	logging.basicConfig(stream=sys.stderr)
+	sys.path.insert(0,"/var/www/p5-linux-server-config/")
+
+	from catalog import app as application
+
+
+sudo a2ensite catalog
+sudo a2dissite 000-default
+
+
+
+### set up Postgres user ###
+https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps
+
+sudo -i -u postgres
+psql
+CREATE ROLE catalog WITH LOGIN password 'catalog';
+CREATE DATABASE catalog WITH OWNER catalog;
+\c catalog
+REVOKE ALL ON SCHEMA public FROM public;
+GRANT ALL ON SCHEMA public TO catalog;
+
+sudo service apache2 restart 
+sudo apt-get update
+sudo apt-get upgrade
