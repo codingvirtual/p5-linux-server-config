@@ -1,6 +1,14 @@
-https://discussions.udacity.com/t/p5-how-i-got-through-it/15342
-https://github.com/robertavram/Linux-Server-Configuration
-https://docs.google.com/document/d/1J0gpbuSlcFa2IQScrTIqI6o3dice-9T7v8EDNjJDfUI/pub?embedded=true
+Fullstack Nanodegree - Project 5 - Linux Server Configuration
+=============================================================
+
+### Table of Contents
+
+*	Project Background
+*	Project Files
+*	Installation/Use
+*	Resources
+
+
 
 Create development environment
 Connect to environment
@@ -216,3 +224,9 @@ GRANT ALL ON SCHEMA public TO catalog;
 sudo service apache2 restart 
 sudo apt-get update
 sudo apt-get upgrade
+
+### Resources
+[https://discussions.udacity.com/t/p5-how-i-got-through-it/15342]
+[https://github.com/robertavram/Linux-Server-Configuration]
+[https://docs.google.com/document/d/1J0gpbuSlcFa2IQScrTIqI6o3dice-9T7v8EDNjJDfUI/pub?embedded=true]
+[https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps]
