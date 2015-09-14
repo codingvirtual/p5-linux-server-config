@@ -1,9 +1,9 @@
-__author__ = 'Greg'
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/p5-linux-server-config/")
 
 # Entry point for this application.
 # Import the main app code
-from catalog_main import app
 
-# run the code on port 8000
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+from catalog_main import app as application

@@ -16,7 +16,7 @@ import requests
 from catalog_main.mod_catalog.models import Base, Category, CategoryItem
 
 # create connection to database
-engine = create_engine('sqlite:///catalog_main/mod_db/catalog.db')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 Base.metadata.create_all(engine)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -70,7 +70,7 @@ def links_are_visible(session):
 # The client id is used by Google to allow users to log in to this
 # app using their Google sign-in.
 CLIENT_ID = json.loads(
-    open('../client_secrets.json', 'r').read())['web']['client_id']
+    open('/var/www/client_secrets.json', 'r').read())['web']['client_id']
 
 # Register this module as a Blueprint.
 mod_catalog = Blueprint('mod_catalog', __name__, url_prefix='/catalog')
@@ -129,7 +129,7 @@ def gconnect():
     code = request.data
     try:
         # Attempt the OAuth flow using the client secrets file
-        oauth_flow = flow_from_clientsecrets('../client_secrets.json',
+        oauth_flow = flow_from_clientsecrets('/var/www/client_secrets.json',
                                              scope='')
         oauth_flow.redirect_uri = 'postmessage'
         # Execute the OAuth request. The result should be a set of credentials
