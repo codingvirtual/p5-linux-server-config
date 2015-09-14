@@ -226,7 +226,7 @@ sudo apt-get update
 sudo apt-get upgrade
 
 ### Resources
-[https://discussions.udacity.com/t/p5-how-i-got-through-it/15342]
-[https://github.com/robertavram/Linux-Server-Configuration]
-[https://docs.google.com/document/d/1J0gpbuSlcFa2IQScrTIqI6o3dice-9T7v8EDNjJDfUI/pub?embedded=true]
-[https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps]
+https://discussions.udacity.com/t/p5-how-i-got-through-it/15342
+https://github.com/robertavram/Linux-Server-Configuration
+https://docs.google.com/document/d/1J0gpbuSlcFa2IQScrTIqI6o3dice-9T7v8EDNjJDfUI/pub?embedded=true
+https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps
