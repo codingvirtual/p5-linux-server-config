@@ -1,13 +1,48 @@
 Fullstack Nanodegree - Project 5 - Linux Server Configuration
 =============================================================
 
-### Table of Contents
+Table of Contents
+-----------------
 
 *	Project Background
-*	Project Files
-*	Installation/Use
+*	Prerequisites
+*	Step-by-step
 *	Resources
 
+
+### Project Background
+
+The purpose of this project is to gain an understanding of how to configure
+an Ubuntu server "out of the box" in such a way that it is at least reasonably
+secure at the outset. Once properly configured, a Python-based application that
+serves a simple catalog of items is then configured along with the supporting
+tools such as Apache2 and Postgres.
+
+### Prerequisites
+
+Perhaps the most important prerequisite of this project is patience and
+determination. Creating a set of steps that one can follow precisely is
+nearly impossible given the literally limitless variations of hardware,
+software, and knowledge level of the reader. For that reason, you should
+be prepared to do quite a bit of additional reading to supplement your
+understanding, though I'll do my best to thoroughly explain things here to
+try to limit how many other resources you need to go to.
+
+Here are some basic prerequisites:
+
+1.	You will need somewhere to run all of this. In the Udacity project, an
+Amazon EC2 instance was provided for us that contained the base build of
+Ubuntu 14.04 Server Edition along with a private SSH key file that allowed
+us to log into the instance. If you are starting from bare metal, you will
+have to take care of getting Ubuntu 14.04 Server installed first. You will
+also need to generate a set of SSH keys to log into it with. Steps for this
+will be lightly discussed below.
+2.	The catalog project that is supplied requires a Google developer's account
+in order to enable sign-in with a Google Plus ID. You will have to create a
+project in the developer's console mainly to be able to generate a client
+secrets file for the catalog project. If you choose not to install the catalog
+project (which is entirely optional), you are off the hook for this pre-req
+entirely.
 
 
 Create development environment
