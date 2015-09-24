@@ -309,7 +309,7 @@ And finally, log off and then reconnect on port 2200. Type:
 
 Now log back on as root, but use this (notice the -p 2200 on the end):
 
-	ssh -i ~/.ssh/udacity_key.rsa root@xx.xx.xx.xx -p 2200
+	ssh -i ~/.ssh/linuxCourse_rsa root@xx.xx.xx.xx -p 2200
 
 Now that we have ssh reconfigured to port 2200, we're going to add some
 restrictions so that the 'grader' user is the only user that can ssh into
